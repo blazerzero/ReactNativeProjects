@@ -5,15 +5,29 @@ import {
   Platform,
   Text,
   View,
+  Clipboard
 } from 'react-native';
 import { ButtonGroup } from 'react-native-elements';
+import Toast, {DURATION} from 'react-native-easy-toast';
 import { Constants } from 'expo';
+
+global.result = 0;
+global.operand2 = 0;
+global.calculated = true;
 
 export default class App extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <ButtonGroup buttons={[0]} disabled='true' containerStyle={styles.result} textStyle={{color: 'white', fontSize: 72}}/>
+        <Toast ref="toast"/>
+        <ButtonGroup 
+          buttons={[global.result]} 
+          containerStyle={styles.result} 
+          textStyle={{color: 'white', fontSize: 72}}
+          onPress={() => {
+            Clipboard.setString(global.result.toString());
+            this.refs.toast.show('Copied to clipboard!', DURATION.LENGTH_LONG);
+          }}/>
         <ButtonGroup buttons={['+', '-', 'x', '÷']} containerStyle={styles.padrow} textStyle={{fontSize: 64}}/>
         <ButtonGroup buttons={['7', '8', '9']} containerStyle={styles.padrow} textStyle={{fontSize: 64}}/>
         <ButtonGroup buttons={['4', '5', '6']} containerStyle={styles.padrow} textStyle={{fontSize: 64}}/>
