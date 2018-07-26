@@ -28,7 +28,7 @@ export default class App extends React.Component {
             Clipboard.setString(global.result.toString());
             this.refs.toast.show('Copied to clipboard!', DURATION.LENGTH_LONG);
           }}/>
-        <ButtonGroup buttons={['+', '-', 'x', '÷']} containerStyle={styles.padrow} textStyle={{fontSize: 64}}/>
+        <ButtonGroup buttons={['+', '-', 'x', '÷', 'c']} containerStyle={styles.padrow} textStyle={{fontSize: 64}}/>
         <ButtonGroup buttons={['7', '8', '9']} containerStyle={styles.padrow} textStyle={{fontSize: 64}}/>
         <ButtonGroup buttons={['4', '5', '6']} containerStyle={styles.padrow} textStyle={{fontSize: 64}}/>
         <ButtonGroup buttons={['1', '2', '3']} containerStyle={styles.padrow} textStyle={{fontSize: 64}}/>
