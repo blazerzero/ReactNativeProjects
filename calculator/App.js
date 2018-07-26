@@ -13,12 +13,12 @@ export default class App extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.result}>
-          0
-        </Text>
-        <ButtonGroup buttons={['7', '8', '9']} containerStyle={styles.padrow}/>
-        <ButtonGroup buttons={['4', '5', '6']} containerStyle={styles.padrow}/>
-        <ButtonGroup buttons={['1', '2', '3']} containerStyle={styles.padrow}/>
+        <ButtonGroup buttons={[0]} disabled='true' containerStyle={styles.result} textStyle={{color: 'white', fontSize: 72}}/>
+        <ButtonGroup buttons={['+', '-', 'x', '÷']} containerStyle={styles.padrow} textStyle={{fontSize: 64}}/>
+        <ButtonGroup buttons={['7', '8', '9']} containerStyle={styles.padrow} textStyle={{fontSize: 64}}/>
+        <ButtonGroup buttons={['4', '5', '6']} containerStyle={styles.padrow} textStyle={{fontSize: 64}}/>
+        <ButtonGroup buttons={['1', '2', '3']} containerStyle={styles.padrow} textStyle={{fontSize: 64}}/>
+        <ButtonGroup buttons={['+/-', '0', '=']} containerStyle={styles.padrow} textStyle={{fontSize: 64}}/>
       </View>
     );
   }
@@ -30,19 +30,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#d73f09',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: Constants.statusBarHeight
+    paddingTop: Constants.statusBarHeight,
+    paddingBottom: Constants.statusBarHeight
   },
   result: {
     flex: 1,
-    color: 'white',
-    fontSize: 72,
-    fontWeight: 'normal',
-    fontFamily:  'System',
-    backgroundColor: 'black',
     justifyContent: 'center',
-    textAlign: 'right',
+    alignItems: 'center',
+    backgroundColor: 'black',
+    flexDirection: 'row',
     padding: 10,
-    flexDirection: 'row'
   },
   padrow: {
     flex: 1,
