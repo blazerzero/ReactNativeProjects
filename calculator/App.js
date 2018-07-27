@@ -14,7 +14,10 @@ import { Constants } from 'expo';
 global.result = '0';
 global.operand2 = '0';
 global.operator = '+';
-global.calculated = false;
+global.calculated = false; // flag for whether or not a result has been calculated yet
+global.doOpAgain = false; // flag for repeating the last operator and second operand again
+global.opOnSelf = false; // flag for performing the operation using the result as the both the first and second operand
+global.op2Saved = false; // flag for whether or not the operand being reused has been saved
 
 export default class App extends React.Component {
   constructor() {
@@ -38,9 +41,11 @@ export default class App extends React.Component {
   
   doOperation = () => {
     if (global.calculated) {
-      global.operand2 = '0';
+      if (!global.doOpAgain) global.operand2 = '0';
       global.calculated = false;
+      this.refs.toast.show('Operator: ' + global.operator, DURATION.LENGTH_LONG);
     }
+    global.opOnSelf = true;
     if (global.operator == '+') {
       global.result = (parseFloat(global.result) + parseFloat(global.operand2)).toString();
       this.updateText(global.result);
@@ -60,7 +65,7 @@ export default class App extends React.Component {
   }
   
   updateText = (newValue) => {
-    this.setState({result: newValue.toString()})
+    this.setState({result: newValue.toString().substring(0, 8)})
   }
   
   render() {
@@ -80,6 +85,7 @@ export default class App extends React.Component {
           containerStyle={styles.padrow} 
           textStyle={{fontSize: 64}}
           onPress={(index) => {
+            global.doOpAgain = false;
             var operators = ['+', '-', '*', '/']
             if (index < 4) {
               this.doOperation();
@@ -98,6 +104,7 @@ export default class App extends React.Component {
           textStyle={{fontSize: 64}}
           onPress={(index) => {
             var values = [7, 8, 9];
+            global.opOnSelf = false;
             this.buildOperand(index, values);
           }}/>
         <ButtonGroup 
@@ -106,6 +113,7 @@ export default class App extends React.Component {
           textStyle={{fontSize: 64}}
           onPress={(index) => {
             var values = [4, 5, 6];
+            global.opOnSelf = false;
             this.buildOperand(index, values);
           }}/>
         <ButtonGroup 
@@ -114,6 +122,7 @@ export default class App extends React.Component {
           textStyle={{fontSize: 64}}
           onPress={(index) => {
             var values = [1, 2, 3];
+            global.opOnSelf = false;
             this.buildOperand(index, values);
           }}/>
         <ButtonGroup 
@@ -134,8 +143,16 @@ export default class App extends React.Component {
               this.buildOperand(0, [0]);
             }
             else if (index == 2) {
+              if (global.opOnSelf && !global.op2Saved) {
+                global.operand2 = global.result;
+              }
               this.doOperation();
               global.calculated = true;
+              global.doOpAgain = true;
+              if (global.opOnSelf && !global.op2Saved) {
+                 global.op2Saved = true;
+              }
+              else if (!global.opOnSelf) global.operator = '+';
             }
           }}/>
       </View>
