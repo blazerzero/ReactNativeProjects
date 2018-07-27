@@ -13,15 +13,49 @@ import { Constants } from 'expo';
 
 global.result = '0';
 global.operand2 = '0';
-global.operator = "";
-global.op1made = false;
-global.calculated = true;
+global.operator = '+';
+global.calculated = false;
 
 export default class App extends React.Component {
   constructor() {
     super();
     this.state = {
       result: '0'
+    }
+  }
+  
+  buildOperand = (index, values) => {
+    if (global.calculated) {
+      global.result = '0';
+      global.operand2 = '0';
+      global.operator = '+';
+      global.calculated = false;
+    }
+    global.operand2 += values[index];
+    if (global.operand2[0] == 0) global.operand2 = global.operand2.substring(1);
+    this.updateText(global.operand2);
+  }
+  
+  doOperation = () => {
+    if (global.calculated) {
+      global.operand2 = '0';
+      global.calculated = false;
+    }
+    if (global.operator == '+') {
+      global.result = (parseFloat(global.result) + parseFloat(global.operand2)).toString();
+      this.updateText(global.result);
+    }
+    else if (global.operator == '-') {
+      global.result = (parseFloat(global.result) - parseFloat(global.operand2)).toString();
+      this.updateText(global.result);
+    }
+    else if (global.operator == '*') {
+      global.result = (parseFloat(global.result) * parseFloat(global.operand2)).toString();
+      this.updateText(global.result);
+    }
+    else if (global.operator == '/') {
+      global.result = (parseFloat(global.result) / parseFloat(global.operand2)).toString();
+      this.updateText(global.result);
     }
   }
   
@@ -36,7 +70,7 @@ export default class App extends React.Component {
         <Text
           style={styles.result}
           onPress={() => {
-            Clipboard.setString(global.result.toString());
+            Clipboard.setString(global.result);
             this.refs.toast.show('Copied to clipboard!', DURATION.LENGTH_LONG);
           }}>
           {this.state.result}
@@ -46,29 +80,17 @@ export default class App extends React.Component {
           containerStyle={styles.padrow} 
           textStyle={{fontSize: 64}}
           onPress={(index) => {
-            this.setState({index});
-            if (index == 0) {
-              if (global.op1made) global.result = parseInt(global.result) + parseInt(global.operand2);
-              this.updateText(global.result);
-            } 
-            else if (index == 1) {
-              if (global.op1made) global.result = parseInt(global.result) - parseInt(global.operand2);
-              this.updateText(global.result);
-            }
-            else if (index == 2) {
-              if (global.op1made) global.result = parseInt(global.result) * parseInt(global.operand2);
-              this.updateText(global.result);
-            }
-            else if (index == 3) {
-              if (global.op1made) global.result = parseInt(global.result) / parseInt(global.operand2);
-              this.updateText(global.result);
+            var operators = ['+', '-', '*', '/']
+            if (index < 4) {
+              this.doOperation();
+              global.operator = operators[index];
             }
             else if (index == 4) {
-              if (global.op1made) global.operand2 = 0;
-              else global.result = 0;
+              global.operand2 = '0';
+              if (global.calculated) global.result = '0';
               this.updateText(0);
             }
-            global.op1made = true;
+            global.operand2 = '0';
           }}/>
         <ButtonGroup 
           buttons={['7', '8', '9']}
@@ -76,16 +98,7 @@ export default class App extends React.Component {
           textStyle={{fontSize: 64}}
           onPress={(index) => {
             var values = [7, 8, 9];
-            if (!global.op1made) {
-              global.result += values[index];
-              if (global.result[0] == 0) global.result = global.result.substring(1);
-              this.updateText(global.result);
-            }
-            else {
-              global.operand2 += values[index];
-              if (global.operand2[0] == 0) global.operand2 = global.operand2.substring(1);
-              this.updateText(global.operand2);
-            }
+            this.buildOperand(index, values);
           }}/>
         <ButtonGroup 
           buttons={['4', '5', '6']} 
@@ -93,16 +106,7 @@ export default class App extends React.Component {
           textStyle={{fontSize: 64}}
           onPress={(index) => {
             var values = [4, 5, 6];
-            if (!global.op1made) {
-              global.result += values[index];
-              if (global.result[0] == 0) global.result = global.result.substring(1);
-              this.updateText(global.result);
-            }
-            else {
-              global.operand2 += values[index];
-              if (global.operand2[0] == 0) global.operand2 = global.operand2.substring(1);
-              this.updateText(global.operand2);
-            }
+            this.buildOperand(index, values);
           }}/>
         <ButtonGroup 
           buttons={['1', '2', '3']} 
@@ -110,21 +114,30 @@ export default class App extends React.Component {
           textStyle={{fontSize: 64}}
           onPress={(index) => {
             var values = [1, 2, 3];
-            if (!global.op1made) {
-              global.result += values[index];
-              if (global.result[0] == 0) global.result = global.result.substring(1);
-              this.updateText(global.result);
-            }
-            else {
-              global.operand2 += values[index];
-              if (global.operand2[0] == 0) global.operand2 = global.operand2.substring(1);
-              this.updateText(global.operand2);
-            }
+            this.buildOperand(index, values);
           }}/>
         <ButtonGroup 
           buttons={['+/-', '0', '=']} 
           containerStyle={styles.padrow} 
-          textStyle={{fontSize: 64}}/>
+          textStyle={{fontSize: 64}}
+          onPress={(index) => {
+            if (index == 0) {
+              if (global.calculated) {
+                global.operand2 = global.result;
+                global.result = '0';
+                global.calculated = false;
+              }
+              global.operand2 = (parseInt(global.operand2) * -1).toString();
+              this.updateText(global.operand2);
+            }
+            else if (index == 1) {
+              this.buildOperand(0, [0]);
+            }
+            else if (index == 2) {
+              this.doOperation();
+              global.calculated = true;
+            }
+          }}/>
       </View>
     );
   }
