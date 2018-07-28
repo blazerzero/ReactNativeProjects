@@ -91,8 +91,8 @@ export default class App extends React.Component {
           <Text
             style={styles.result}
             onPress={() => {
-              Clipboard.setString(global.result);
-              this.refs.toast.show('Copied to clipboard!', DURATION.LENGTH_LONG);
+              /*Clipboard.setString(global.result);
+              this.refs.toast.show('Copied to clipboard!', DURATION.LENGTH_LONG);*/
             }}>
             {this.state.result}
           </Text>
