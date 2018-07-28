@@ -4,8 +4,7 @@ import {
   PixelRatio,
   Platform,
   Text,
-  View,
-  Clipboard,
+  View
 } from 'react-native'
 import { ButtonGroup } from 'react-native-elements';
 import Toast, {DURATION} from 'react-native-easy-toast';
@@ -88,12 +87,7 @@ export default class App extends React.Component {
       this.state.fontLoaded ? (
         <View style={styles.container}>
           <Toast ref="toast"/> 
-          <Text
-            style={styles.result}
-            onPress={() => {
-              /*Clipboard.setString(global.result);
-              this.refs.toast.show('Copied to clipboard!', DURATION.LENGTH_LONG);*/
-            }}>
+          <Text style={styles.result}>
             {this.state.result}
           </Text>
           <ButtonGroup 
