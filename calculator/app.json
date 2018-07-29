@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Simple Calculator",
-    "description": "My first application made in React Native. Just a simple calculator utilizing Beaver Orange, the official orange color of Oregon State University.",
+    "name": "calculator - simple OSU-themed calculator",
+    "description": "A simple and straightforward calculator utilizing Oregon State University's school colors. \nImplemented using React Native.",
     "slug": "calculator",
     "privacy": "public",
     "sdkVersion": "28.0.0",
@@ -12,7 +12,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#d73f09"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -21,7 +21,7 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false
     }
   }
 }
