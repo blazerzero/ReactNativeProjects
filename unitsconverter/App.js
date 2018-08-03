@@ -2,24 +2,53 @@ import React from 'react';
 import { 
   StyleSheet, 
   Text, 
-  View, 
-  StatusBar,
-  NavigatorIOS} from 'react-native';
+  View,
+  Button,
+  StatusBar
+} from 'react-native';
 import { Constants } from 'expo';
+import { Navigation } from 'react-native-navigation';
+import { registerScreens } from './screens';
+
+registerScreens();
+
+const ColoredStatusBar = ({backgroundColor, ...props}) => (
+  <View style={[styles.statusBar, { backgroundColor }]}>
+    <StatusBar translucent backgroundColor={backgroundColor} {...props} />
+  </View>
+);
+
+const Section = ({onPress, title, color, accessibilityLabel, ...props}) => (
+  <View style={[styles.section]}>
+    <Button 
+      onPress={onPress}
+      title={title}
+      color={color}
+      accessibilityLabel={accessibilityLabel}
+      {...props}
+    />
+  </View>
+);
 
 export default class App extends React.Component {
   render() {
     return (
-      <View>
-        <StatusBar
-          backgroundColor="#2c3571"
-          barStyle="light-content"
-        />
-        <View style={styles.container}>
-          <View style={styles.section}>
-            <Text>Open up App.js to start working on your app!</Text>
-          </View>
-        </View>
+      <View style={styles.container}>
+        <ColoredStatusBar backgroundColor="#2c3571" barStyle="light-content"/>
+        <Section 
+          onPress={() => {
+            Navigation.showModal({
+              screen: 'unitsconverter.DistanceScreen',
+              title: 'Distance',
+              passProps: {},
+              navigatorStyle: {},
+              navigatorButtons: {},
+              animationType: 'slide-up'
+            });
+          }}
+          title="Distance"
+          color="#00f"
+          accessibilityLabel="Convert distance units" />
       </View>
     );
   }
@@ -34,12 +63,16 @@ const styles = StyleSheet.create({
     paddingTop: Constants.statusBarHeight,
     paddingBottom: Constants.statusBarHeight
   },
+  statusBar: {
+    height: StatusBar.currentHeight
+  },
   section: {
     flex: 1,
     borderRadius: 4,
     borderWidth: 0.5,
+    padding: 10,
     borderColor: '#b8b8b8',
-    backgroundColor: '#4a9dff',
+    backgroundColor: '#bbb',
     flexDirection: 'row'
   }
 });
